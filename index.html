@@ -14,9 +14,8 @@
         <div class="header">
 
             <div id="weather-info" style="text-align: left;">
-                <h2 id="weather-header">오늘의 날씨</h2>
+                <h2 id="weather-header">< 오늘의 날씨 ></h2><img id="weather_icon">
                 <br>
-                <p id=""></p>
                 <p id="city_Name"></p>
                 <p id="city_weather"></p>
                 <p id="city_temperature"></p>
@@ -24,14 +23,14 @@
             </div>
             <p></p>
             <div class="date-time">
-                <h2>현재 시간</h2>
+                <h2>< 현재 시간 ></h2>
                 <br>
                 <p id="currenttime"></p>
                 <p id="currentdate"></p>
             </div>
         </div>
         <div class="bus-info">
-            <h2>BUS</h2>
+            <h2>< BUS > </h2>
             <br>
             <p style="text-align: right;">현재 설정 위치 : <span>현재위치는~!</span></p>
             <br>
@@ -54,6 +53,7 @@
 
     <script>
         // updateTime() 함수 정의
+        ////////////////////////////////현재 시간 정의 /////////////////////////
         function updateTime() {
             const now = new Date(); // 현재 시간을 가져옴
             const hours = now.getHours().toString().padStart(2, '0');
@@ -74,18 +74,29 @@
 
         setInterval(updateTime, 1000);
 
-        var xhr = new XMLHttpRequest();
-        var url = 'http://apis.data.go.kr/6410000/busarrivalservice/getBusArrivalList'; /*URL*/
-        var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + 'hAdmwyPhz7cp45rb1yIPz45FUG6UgUfiKqkPUxdNaBQ1VB7rU8pF4MZxgEMkHCMxEWqNzKN6xyS9g7c%2Fh1AG6A%3D%3D'; /*Service Key*/
-        queryParams += '&' + encodeURIComponent('stationId') + '=' + encodeURIComponent('200000078'); /**/
-        xhr.open('GET', url + queryParams);
-        xhr.onreadystatechange = function () {
-            if (this.readyState == 4) {
-                console.log('Status: ' + this.status + 'nHeaders: ' + JSON.stringify(this.getAllResponseHeaders()) + 'nBody: ' + this.responseText);
-            }
-        };
+        ////////////////////////////////////////////////////////////////////
+        ////////////////////// 버스 api /////////////////////////////////// 
+        function getBusInformation(){
+            var xhr = new XMLHttpRequest();
+            var url = 'http://apis.data.go.kr/6410000/busarrivalservice/getBusArrivalList'; /*URL*/
+            var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + '1234567890'; /*Service Key*/
+            queryParams += '&' + encodeURIComponent('stationId') + '=' + encodeURIComponent('200000078'); /**/
+            xhr.open('GET', url + queryParams);
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    console.log('Status: ' + this.status + 'nHeaders: ' + JSON.stringify(this.getAllResponseHeaders()) + 'nBody: ' + this.responseText);
+                }
+            };
+    
+            xhr.send('');
+        }
 
-        xhr.send('');
+        getBusInformation()
+        setInterval(getBusInformation,60000)
+
+        /////////////////////////////////////////////////////////////////////
+        /////////////////////////// 날씨 api ////////////////////////////////
+        //////////////////////////////////////////////////////////////////////
 
         function getLocation() {
             if (navigator.geolocation) {
@@ -105,11 +116,13 @@
                             var tempperature = data.main.temp;
                             var cityName = data.name;
                             var humidity = data.main.humidity;
+                            var weather_icon = data.weather[0].icon
 
                             document.getElementById('city_Name').innerHTML = `도시 : ${cityName}`
                             document.getElementById('city_weather').innerHTML = `날씨 : ${weatherDescription}`
-                            document.getElementById('city_temperature').innerHTML = `온도 : ${tempperature} °C`
+                            document.getElementById('city_temperature').innerHTML = `온도 : ${tempperature.toFixed(1)} °C`
                             document.getElementById('city_humanity').innerHTML = `습도 : ${humidity}%`
+                            document.getElementById('weather_icon').src = `https://openweathermap.org/img/wn/${weather_icon}@2x.png`
                         })
                         .catch(() => {
                             console.log("날씨 정보를 가져오는 중 오류 발생 : ", error);
@@ -120,7 +133,11 @@
         }
 
         getLocation();
-        setInterval(getLocation(), 60000);
+        setInterval(getLocation(), 1000*3600);
+
+        //function getRecommendCloth(){
+        //    
+        //}
     </script>
     </head>
 

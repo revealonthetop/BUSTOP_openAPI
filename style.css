@@ -19,6 +19,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 추가 */
     text-align: center;
+    border:4px solid #333333;
     /* height: 50vw;
     width: 50vw; */
 }
@@ -28,17 +29,21 @@ body {
     justify-content: space-between;
     margin-bottom: 20px;
     color: #333333; /* 어두운 글자색 */
+
 }
 
 .weather-header{
     text-align: left;
 }
 .weather-info {
+    padding-left: 0px;
     text-align: left;
+    border: 4px solid #333333;
 }
 
 .date-time {
     text-align: right;
+    border-radius: 10px;
 }
 
 .recommend {
@@ -48,6 +53,8 @@ body {
 }
 
 .bus-info {
+
+    border-radius: 10px;
     margin-bottom: 20px;
     color: #333333; /* 어두운 글자색 */
 }
