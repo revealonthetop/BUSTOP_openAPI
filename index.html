@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>날씨 및 버스 정보</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="/website/css/uicons-bold-rounded.css">
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+
+            <div id="weather-info" style="text-align: left;">
+                <h2 id="weather-header">오늘의 날씨</h2>
+                <br>
+                <p id=""></p>
+                <p id="city_Name"></p>
+                <p id="city_weather"></p>
+                <p id="city_temperature"></p>
+                <p id="city_humanity"></p>
+            </div>
+            <p></p>
+            <div class="date-time">
+                <h2>현재 시간</h2>
+                <br>
+                <p id="currenttime"></p>
+                <p id="currentdate"></p>
+            </div>
+        </div>
+        <div class="bus-info">
+            <h2>BUS</h2>
+            <br>
+            <p style="text-align: right;">현재 설정 위치 : <span>현재위치는~!</span></p>
+            <br>
+            <p>102번 도착예정시간: 12분, 10정거장 전</p>
+            <p>103번 도착예정시간: 2분, 2정거장 전</p>
+            <p>311번 도착예정시간: 1분, 1정거장 전</p>
+        </div>
+        <p></p>
+        <div class="recommend">
+            <h3>옷 추천 해주는 칸</h3>
+        </div>
+
+        <div class="footer">
+            <a href="#"><img src="./resource/front-of-bus.png" alt="알람"></a>
+            <a href="#"><img src="./resource/location-pin.png" alt="버스"></a>
+            <a href="#"><img src="./resource/hamburger.png" alt="메뉴"></a>
+            <a href="#"><img src="./resource/setting.png" alt="설정"></a>
+        </div>
+    </div>
+
+    <script>
+        // updateTime() 함수 정의
+        function updateTime() {
+            const now = new Date(); // 현재 시간을 가져옴
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const currentTime = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('currenttime').textContent = currentTime;
+
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            const currentDate = now.toLocaleDateString('ko-KR', options);
+            document.getElementById('currentdate').innerHTML = currentDate;
+        }
+
+        setInterval(updateTime, 1000);
+
+        var xhr = new XMLHttpRequest();
+        var url = 'http://apis.data.go.kr/6410000/busarrivalservice/getBusArrivalList'; /*URL*/
+        var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + 'hAdmwyPhz7cp45rb1yIPz45FUG6UgUfiKqkPUxdNaBQ1VB7rU8pF4MZxgEMkHCMxEWqNzKN6xyS9g7c%2Fh1AG6A%3D%3D'; /*Service Key*/
+        queryParams += '&' + encodeURIComponent('stationId') + '=' + encodeURIComponent('200000078'); /**/
+        xhr.open('GET', url + queryParams);
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                console.log('Status: ' + this.status + 'nHeaders: ' + JSON.stringify(this.getAllResponseHeaders()) + 'nBody: ' + this.responseText);
+            }
+        };
+
+        xhr.send('');
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var lat = position.coords.latitude; // 위도
+                    var lng = position.coords.longitude; // 경도
+
+                    var apiKey = "dbd7a97a91c0ac08a69d01e9a6845086";
+                    var apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=metric&appid=${apiKey}`;
+
+                    fetch(apiUrl)
+                        .then(response => response.json())
+                        .then((data) => {
+
+
+                            var weatherDescription = data.weather[0].description;
+                            var tempperature = data.main.temp;
+                            var cityName = data.name;
+                            var humidity = data.main.humidity;
+
+                            document.getElementById('city_Name').innerHTML = `도시 : ${cityName}`
+                            document.getElementById('city_weather').innerHTML = `날씨 : ${weatherDescription}`
+                            document.getElementById('city_temperature').innerHTML = `온도 : ${tempperature} °C`
+                            document.getElementById('city_humanity').innerHTML = `습도 : ${humidity}%`
+                        })
+                        .catch(() => {
+                            console.log("날씨 정보를 가져오는 중 오류 발생 : ", error);
+                            document.getElementById('weather-info').innerHTML = "날씨 정보를 가져올 수 없습니다.";
+                        })
+                })
+            }
+        }
+
+        getLocation();
+        setInterval(getLocation(), 60000);
+    </script>
+    </head>
+
+</body>
+
+</html>

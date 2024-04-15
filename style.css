@@ -1,0 +1,68 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2; /* 모던한 느낌의 배경색 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #ffffff; /* 밝은 색의 컨테이너 배경색 */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 추가 */
+    text-align: center;
+    /* height: 50vw;
+    width: 50vw; */
+}
+
+.header {
+    /* display: flex; */
+    justify-content: space-between;
+    margin-bottom: 20px;
+    color: #333333; /* 어두운 글자색 */
+}
+
+.weather-header{
+    text-align: left;
+}
+.weather-info {
+    text-align: left;
+}
+
+.date-time {
+    text-align: right;
+}
+
+.recommend {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333333; /* 어두운 글자색 */
+}
+
+.bus-info {
+    margin-bottom: 20px;
+    color: #333333; /* 어두운 글자색 */
+}
+
+.bus-info:first-child{
+    text-align: right;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer img {
+    width: 30px;
+    height: 30px;
+    filter: brightness(0) saturate(100%) invert(16%) sepia(87%) saturate(2807%) hue-rotate(170deg) brightness(101%) contrast(101%); /* 모던한 아이콘 색상 */
+}
