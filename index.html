@@ -7,14 +7,19 @@
     <title>날씨 및 버스 정보</title>
     <link rel="stylesheet" href="./style.css">
     <link href="/website/css/uicons-bold-rounded.css">
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="api_keys.js"></script>
 
 </head>
+
 <body>
     <div class="container">
         <div class="header">
 
             <div id="weather-info" style="text-align: left;">
-                <h2 id="weather-header">< 오늘의 날씨 ></h2><img id="weather_icon">
+                <h2 id="weather-header">
+                    < 오늘의 날씨 >
+                </h2><img id="weather_icon">
                 <br>
                 <p id="city_Name"></p>
                 <p id="city_weather"></p>
@@ -23,14 +28,18 @@
             </div>
             <p></p>
             <div class="date-time">
-                <h2>< 현재 시간 ></h2>
+                <h2>
+                    < 현재 시간 >
+                </h2>
                 <br>
                 <p id="currenttime"></p>
                 <p id="currentdate"></p>
             </div>
         </div>
-        <div class="bus-info">
-            <h2>< BUS > </h2>
+        <div class="bus-info" style="text-align: left;">
+            <h2>
+                < BUS >
+            </h2>
             <br>
             <p style="text-align: right;">현재 설정 위치 : <span>현재위치는~!</span></p>
             <br>
@@ -41,6 +50,7 @@
         <p></p>
         <div class="recommend">
             <h3>옷 추천 해주는 칸</h3>
+            <p id="cloth"></p>
         </div>
 
         <div class="footer">
@@ -76,7 +86,7 @@
 
         ////////////////////////////////////////////////////////////////////
         ////////////////////// 버스 api /////////////////////////////////// 
-        function getBusInformation(){
+        function getBusInformation() {
             var xhr = new XMLHttpRequest();
             var url = 'http://apis.data.go.kr/6410000/busarrivalservice/getBusArrivalList'; /*URL*/
             var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + '1234567890'; /*Service Key*/
@@ -87,16 +97,19 @@
                     console.log('Status: ' + this.status + 'nHeaders: ' + JSON.stringify(this.getAllResponseHeaders()) + 'nBody: ' + this.responseText);
                 }
             };
-    
+
             xhr.send('');
         }
 
         getBusInformation()
-        setInterval(getBusInformation,60000)
+        setInterval(getBusInformation, 60000)
 
         /////////////////////////////////////////////////////////////////////
         /////////////////////////// 날씨 api ////////////////////////////////
         //////////////////////////////////////////////////////////////////////
+        var weatherDescription;
+        var tempperature;
+        var humidity;
 
         function getLocation() {
             if (navigator.geolocation) {
@@ -104,19 +117,18 @@
                     var lat = position.coords.latitude; // 위도
                     var lng = position.coords.longitude; // 경도
 
-                    var apiKey = "dbd7a97a91c0ac08a69d01e9a6845086";
+                    var apiKey = "dbd7a97a91c0ac08a69d01e9a6845086"
                     var apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=metric&appid=${apiKey}`;
 
                     fetch(apiUrl)
                         .then(response => response.json())
                         .then((data) => {
 
-
-                            var weatherDescription = data.weather[0].description;
-                            var tempperature = data.main.temp;
                             var cityName = data.name;
-                            var humidity = data.main.humidity;
                             var weather_icon = data.weather[0].icon
+                            weatherDescription = data.weather[0].description;
+                            tempperature = data.main.temp;
+                            humidity = data.main.humidity;
 
                             document.getElementById('city_Name').innerHTML = `도시 : ${cityName}`
                             document.getElementById('city_weather').innerHTML = `날씨 : ${weatherDescription}`
@@ -133,11 +145,43 @@
         }
 
         getLocation();
-        setInterval(getLocation(), 1000*3600);
+        setInterval(getLocation(), 1000 * 3600);
+////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// chat-GPT 응답 /////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+        function getRecommendCloth() {
+            const apiKey = 'YOUR_API_KEY';
+            const data = {
+                "message": "날씨, 온도, 습도, 계절을 고려한 옷차림을 짧게 추천해 줘. ",
+                "user": "USER"
+            };
 
-        //function getRecommendCloth(){
-        //    
-        //}
+            fetch('https://api.openai.com/v1/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'GPT-3.5 Turbo',
+                    prompt: JSON.stringify(data), // JSON.stringify()를 사용하여 데이터를 문자열로 변환하여 포함합니다.
+                    max_tokens: 50
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.choices[0].text);
+
+                    // 
+                    // document.getElementById('cloth').innerHTML += 
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        window.addEventListener('load',getRecommendCloth());
+        /////////////////////////////////////////////////////////////////////////
     </script>
     </head>
 
