@@ -4,13 +4,6 @@
     box-sizing: border-box;
 }
 
-h2{
-    border-radius: 30px;
-    background-color: greenyellow;
-    padding: 10px;
-    /* display: flex; */
-}
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2; /* 모던한 느낌의 배경색 */
@@ -24,51 +17,41 @@ body {
     background-color: #ffffff; /* 밝은 색의 컨테이너 배경색 */
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* 약간의 그림자 효과 추가 */
+    border: 10px solid transparent ;
+    border-color: black;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* 약간의 그림자 효과 추가 */
     text-align: center;
-    border:4px solid #333333;
-    max-width: 500px; /* 컨테이너 최대 너비 설정 */
-    /* height: 50vw;
-    width: 50vw; */
+    max-width: 400px;
 }
 
 .header {
-    /* display: flex; */
+    display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
     color: #333333; /* 어두운 글자색 */
-
 }
 
-.weather-header{
-    text-align: left;
-}
 .weather-info {
-    padding-left: 0px;
     text-align: left;
-    border: 4px solid #333333;
+    background-color: rgba(255, 255, 255);
 }
 
 .date-time {
     text-align: right;
-    border-radius: 10px;
+    border-left: 10px solid ; 
+    border-bottom: 10px solid;
 }
 
 .recommend {
-    font-size: 24px;
+    border-top: 10px solid;
+    border-bottom: 10px solid ;
     margin-bottom: 20px;
     color: #333333; /* 어두운 글자색 */
 }
 
 .bus-info {
-
-    border-radius: 10px;
     margin-bottom: 20px;
     color: #333333; /* 어두운 글자색 */
-}
-
-.bus-info:first-child{
-    text-align: right;
 }
 
 .footer {
