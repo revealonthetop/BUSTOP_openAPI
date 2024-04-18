@@ -46,8 +46,9 @@ body {
 
 .date-time {
     text-align: right;
-    border-left: 10px solid ; 
-    border-bottom: 10px solid;
+    border: 10px solid;
+    /* border-left: 10px solid ; 
+    border-bottom: 10px solid; */
     background-color: rgba(255, 0, 0, 0.808);
 }
 

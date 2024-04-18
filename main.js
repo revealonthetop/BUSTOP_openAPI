@@ -31,42 +31,41 @@ function getBusInformation() {
     xhr.open('GET', url + queryParams);
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
-            // XML 문자열을 파싱하여 DOM 객체로 변환
+            //~~~~~~~~ 아래는 XML 문자열을 파싱하여 DOM 객체로 변환하는 코드 ~~~~~~
             var parser = new DOMParser();
             var xmlDoc = parser.parseFromString(this.responseText, "text/xml");
 
-            // busArrivalList 요소들을 가져옴
+            // busArrivalList 요소들을 가져왔습니다.
             var busArrivalLists = xmlDoc.getElementsByTagName("busArrivalList");
 
-            // JSON 객체로 변환할 배열 생성
+            // JSON 객체로 변환할 배열 생성. 일일히 받아주기.
             var jsonData = [];
 
             document.getElementById("bus_route").innerHTML = ''
             // 각 busArrivalList에 대해 반복하여 데이터를 추출하여 JSON 객체로 변환 후 배열에 추가
+            // 모든 busArrivalList 를 받게 될 시 데이터가 너무 길어져 4개만 받게 되었습니다.
             for (var i = 0; i < 4; i++) {
                 var busArrivalList = busArrivalLists[i];
 
-                // 필요한 정보를 가져옴
+                // 필요한 정보만 변수에 저장.
                 var routeId = busArrivalList.getElementsByTagName("routeId")[0].textContent;
                 var locationNo1 = busArrivalList.getElementsByTagName("locationNo1")[0].textContent;
                 var preddictTime1 = busArrivalList.getElementsByTagName("predictTime1")[0].textContent;
 
-                // JSON 객체로 변환하여 배열에 추가
+                // JSON 객체로 변환 -> 배열에 추가
                 var jsonDataItem = {
                     "routeId": routeId,
                     "preddictTime1": preddictTime1,
                     "locationNo1": locationNo1
                 };
+                // 
                 //              <p id="1st_bus">102번 도착예정시간: 12분, 10정거장 전</p>
-                //              <p id="2nd_bus">103번 도착예정시간: 2분, 2정거장 전</p>
-                //              <p id="3rd_bus">311번 도착예정시간: 1분, 1정거장 전</p>
                 jsonData.push(jsonDataItem);
                 document.getElementById("bus_route").innerHTML += `<p>${routeId}번 도착 예정 시간 : ${preddictTime1}분, ${locationNo1}정거장 전 </p>`
             }
 
             // JSON 문자열로 변환하여 출력
             console.log(JSON.stringify(jsonData));
-
 
         }
 

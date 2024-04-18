@@ -56,6 +56,8 @@
         <div class="recommend">
             <br>
             <h3>오늘의 옷 추천</h3>
+            <input type="radio">남성
+            <input type="radio">여성
             <p id="cloth"></p>
             <br>
         </div>
@@ -82,18 +84,17 @@
             // For text-only input, use the gemini-pro model
             const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-            const prompt = `Please give short advice on how to wear clothes considering the season, weather, temperature and humidity. In 10 words. The current temperature is :${tempperature},The weather is: ${weatherDescription}`
+            const prompt = `Please give short advice on how to wear clothes considering the season, weather, temperature and humidity. The current temperature is :${tempperature},The weather is: ${weatherDescription}. plz plz answer in KOREAN lang.`
 
             const result = await model.generateContent(prompt);
             const response = await result.response;
             const text = response.text();
             document.getElementById('cloth').innerHTML = text
         }
-        run();
 
-
+        setTimeout(run,3000);
         getLocation();
-        setInterval(getLocation(), 1000 * 3600);
+        setInterval(getLocation, 1000 * 3600);
         getBusInformation()
         setInterval(getBusInformation, 1000 * 60)
         setInterval(updateTime, 1000);
